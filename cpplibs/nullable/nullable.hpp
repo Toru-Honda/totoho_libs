@@ -7,8 +7,7 @@
 
 #include <stdexcept>
 
-namespace Protocol
-{
+namespace totoho{
 /**
  * nullable template class.
  * default is null.
@@ -48,20 +47,32 @@ public:
     }
     return value_;
   }
+  /**
+   * @fn
+   *  set value. if value is type T, set has_value_ true.
+   */
+  inline void set_value(const nullable<T> &rhs)
+  {
+    value_ = rhs.value_;
+    has_value_ = rhs.has_value_;
+  }
+  inline void set_value(const T &rhs)
+  {
+    value_ = rhs;
+    has_value_ = true;
+  }
   //====================================================
   // operator overloads.
   //====================================================
   inline nullable<T> &operator=(const nullable<T> &rhs)
   {
-    value_ = rhs.value_;
-    has_value_ = rhs.has_value_;
+    set_value(rhs);    
     return *this;
   }
   // for set value using '='.
   inline nullable<T> &operator=(const T &rhs)
   {
-    value_ = rhs;
-    has_value_ = true;
+    set_value(rhs);
     return *this;
   }
   // for set has_value flag false using '='.
@@ -94,9 +105,9 @@ public:
     ,value_(val)
   {}
 
-  nullable<T>(nullable<T> &rhs)
+  nullable<T>(const nullable<T> &rhs)
   : has_value_(rhs.has_value_)
     ,value_(rhs.value_)
   {}
 };
-}
+} // namespace totoho
