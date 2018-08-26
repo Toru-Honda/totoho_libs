@@ -5,9 +5,19 @@
  * @version  2018-06-12
  */
 
+#ifndef __NULLABLE_HPP
+#define __NULLABLE_HPP
+
 #include <stdexcept>
 
 namespace totoho{
+/**
+ * nullopt
+ * unique null value for nullable
+ */
+struct nullopt_t{};
+constexpr nullopt_t nullopt{};
+
 /**
  * nullable template class.
  * default is null.
@@ -61,12 +71,20 @@ public:
     value_ = rhs;
     has_value_ = true;
   }
+  /**
+   * @fn
+   * set_value for has_value flag false
+   */
+  inline void set_value(const nullopt_t &rhs)
+  {
+    set_null();
+  }
   //====================================================
   // operator overloads.
   //====================================================
   inline nullable<T> &operator=(const nullable<T> &rhs)
   {
-    set_value(rhs);    
+    set_value(rhs);
     return *this;
   }
   // for set value using '='.
@@ -79,6 +97,12 @@ public:
   inline nullable<T> &operator=(const void* rhs)
   {
     has_value_ = false;
+    return *this;
+  }
+  // for set has_value flag false using '='.
+  inline nullable<T> &operator=(const nullopt_t& rhs)
+  {
+    set_value(rhs);
     return *this;
   }
   // for boolean expression
@@ -109,5 +133,8 @@ public:
   : has_value_(rhs.has_value_)
     ,value_(rhs.value_)
   {}
+
 };
 } // namespace totoho
+
+#endif // __NULLABLE_HPP
